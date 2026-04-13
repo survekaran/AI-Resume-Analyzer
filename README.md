@@ -1,73 +1,119 @@
-# React + TypeScript + Vite
+🤖 AI Resume Analyzer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An intelligent web application that analyzes resumes using AI and provides actionable feedback to improve them. This project helps users evaluate their resumes based on skills, keywords, formatting, and job relevance.
 
-Currently, two official plugins are available:
+🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+📄 Upload resumes (PDF format)
 
-## React Compiler
+🧠 AI-based resume analysis
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🔍 Extracts key information (skills, education, experience)
 
-## Expanding the ESLint configuration
+📊 Provides feedback and suggestions
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+🎯 Matches resume with job descriptions (optional)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+⚡ Fast and responsive UI
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+🛠️ Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Frontend
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+React + TypeScript
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Vite
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Tailwind CSS
+
+Backend
+
+Python (Flask / FastAPI)
+
+AI / Processing
+
+Natural Language Processing (NLP)
+
+Resume parsing libraries (like spaCy / PyPDF)
+
+📂 Project Structure
+
+AI-Resume-Analyzer/
+│
+
+├── frontend/        # React frontend (Vite + TS)
+
+├── backend/         # Python backend (API + AI logic)
+
+├── models/          # ML/NLP models
+
+├── uploads/         # Uploaded resumes
+
+├── .gitignore
+
+├── README.md
+
+⚙️ Installation & Setup
+
+1️⃣ Clone the repository
+
+git clone https://github.com/your-username/AI-Resume-Analyzer.git
+
+cd AI-Resume-Analyzer
+
+2️⃣ Setup Frontend
+
+cd frontend
+
+npm install
+
+npm run dev
+
+3️⃣ Setup Backend
+
+cd backend
+
+pip install -r requirements.txt
+
+python app.py
+
+💡 How It Works
+
+User uploads a resume
+
+Backend extracts text from the resume
+
+AI processes and analyzes the content
+
+System generates insights like:
+
+Missing skills
+
+Keyword optimization
+
+Formatting suggestions
+
+Results are displayed on the frontend
+
+
+
+🎯 Future Improvements
+
+Job-specific resume scoring
+
+ATS (Applicant Tracking System) simulation
+
+Resume rewriting suggestions
+
+LinkedIn profile analysis
+
+Dashboard with analytics
+
+📜 License
+This project is licensed under the MIT License.
+
+👨‍💻 Author
+Karan Surve
+
+⭐ Support
+If you like this project, give it a ⭐ on GitHub!
