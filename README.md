@@ -95,6 +95,14 @@ Formatting suggestions
 
 Results are displayed on the frontend
 
+Screenshot
+<img width="1918" height="912" alt="image" src="https://github.com/user-attachments/assets/0c043ba4-b992-4348-a080-8943b1ab9c6d" />
+
+<img width="1918" height="913" alt="image" src="https://github.com/user-attachments/assets/9de50071-2ade-4af4-9969-cf823468890d" />
+
+<img width="1919" height="912" alt="image" src="https://github.com/user-attachments/assets/1f708701-be56-46f7-924b-152be26cb128" />
+
+<img width="1919" height="912" alt="image" src="https://github.com/user-attachments/assets/2f5b0402-e782-4c4b-96bb-3a471535d1e9" />
 
 
 🎯 Future Improvements
