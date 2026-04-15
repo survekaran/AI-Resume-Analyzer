@@ -17,6 +17,7 @@ const App: React.FC = () => {
   const [fileName, setFileName] = useState('');
   const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [jobDescription, setJobDescription] = useState('');
 
   const handleFile = useCallback(async (file: File) => {
     setFileName(file.name);
@@ -40,7 +41,7 @@ const App: React.FC = () => {
       // Step 3 — score
       setStep('scoring');
       await sleep(700);
-      const result = analyzeResume(text);
+      const result = analyzeResume(text, jobDescription);
 
       // Step 4 — done
       setStep('done');
@@ -52,7 +53,7 @@ const App: React.FC = () => {
       setErrorMsg(err?.message || 'An unexpected error occurred.');
       setAppState('error');
     }
-  }, []);
+  }, [jobDescription]);
 
   const handleReset = () => {
     setAppState('upload');
@@ -60,6 +61,7 @@ const App: React.FC = () => {
     setAnalysis(null);
     setFileName('');
     setErrorMsg('');
+    setJobDescription('');
   };
 
   return (
@@ -113,7 +115,25 @@ const App: React.FC = () => {
 
           {/* ── Views ─────────────────────────────────────────────────── */}
           {appState === 'upload' && (
-            <UploadZone onFile={handleFile} />
+            <>
+              <div className="job-description-panel">
+                <label htmlFor="job-description" className="job-description-label">
+                  Paste job description (optional)
+                </label>
+                <textarea
+                  id="job-description"
+                  className="job-description-textarea"
+                  value={jobDescription}
+                  onChange={e => setJobDescription(e.target.value)}
+                  placeholder="Paste the job description or posting here to see how well your resume matches the role."
+                  rows={6}
+                />
+                <p className="job-description-hint">
+                  Adding a job description lets ResumeAI compute a tailored job-match score and recommend role-specific keywords.
+                </p>
+              </div>
+              <UploadZone onFile={handleFile} />
+            </>
           )}
 
           {appState === 'processing' && (

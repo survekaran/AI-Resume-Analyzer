@@ -42,7 +42,9 @@ const ResultsView: React.FC<ResultsViewProps> = ({ analysis, fileName, onReset }
     extractedSkills, missingKeywords,
     workExperience, education,
     strengths, weaknesses, actionableTips,
-    breakdown, atsScore, wordCount,
+    breakdown, atsScore, jobMatchScore,
+    jobDescriptionProvided, matchedJobKeywords,
+    missingJobKeywords, wordCount,
   } = analysis;
 
   // Animate entry
@@ -66,6 +68,7 @@ const ResultsView: React.FC<ResultsViewProps> = ({ analysis, fileName, onReset }
       `ResumeAI Analysis Report`,
       `File: ${fileName}`,
       `Overall Score: ${overallScore}/100  (${gradeLabel})`,
+      ...(jobDescriptionProvided ? [`Job Description Match: ${jobMatchScore}/100`] : []),
       ``,
       `--- SCORE BREAKDOWN ---`,
       ...breakdown.map(b => `${b.label}: ${b.score}/100`),
@@ -75,6 +78,9 @@ const ResultsView: React.FC<ResultsViewProps> = ({ analysis, fileName, onReset }
       ``,
       `--- MISSING KEYWORDS ---`,
       missingKeywords.join(', '),
+      ``,
+      `--- JOB DESCRIPTION KEYWORDS MATCH ---`,
+      ...(jobDescriptionProvided ? [`Matched: ${matchedJobKeywords.join(', ')}`, `Missing: ${missingJobKeywords.join(', ')}`] : [`No job description provided.`]),
       ``,
       `--- STRENGTHS ---`,
       ...strengths.map(s => `• ${s}`),
@@ -104,6 +110,7 @@ const ResultsView: React.FC<ResultsViewProps> = ({ analysis, fileName, onReset }
             <h2>Resume Analysis Report</h2>
             <p>
               Analyzed <strong>{fileName}</strong> · {wordCount} words · {extractedSkills.length} skills detected · ATS {atsScore}/100
+              {jobDescriptionProvided && <> · JD Match {jobMatchScore}/100</>}
             </p>
             <div className={`grade-pill ${grade}`} style={{ marginTop: 14 }}>
               {gradeLabel}
@@ -164,6 +171,42 @@ const ResultsView: React.FC<ResultsViewProps> = ({ analysis, fileName, onReset }
           </div>
 
           {/* Strengths */}
+          {jobDescriptionProvided && (
+            <div className="card">
+              <SectionTitle icon="🎯" label="Job Description Matching" bg="rgba(59,130,246,.12)" />
+              <p style={{ marginBottom: 12 }}>
+                Your resume matches <strong>{jobMatchScore}/100</strong> of the job posting keywords.
+              </p>
+              {matchedJobKeywords.length > 0 ? (
+                <>
+                  <div className="tag-list">
+                    {matchedJobKeywords.map(k => (
+                      <span key={k} className="tag found">{k}</span>
+                    ))}
+                  </div>
+                  {missingJobKeywords.length > 0 ? (
+                    <>
+                      <div style={{ margin: '16px 0 10px', fontWeight: 600 }}>Missing from resume</div>
+                      <div className="tag-list">
+                        {missingJobKeywords.map(k => (
+                          <span key={k} className="tag missing">{k}</span>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <p style={{ color: 'var(--emerald)', fontSize: '.88rem' }}>
+                      Excellent match — your resume already captures the posting language.
+                    </p>
+                  )}
+                </>
+              ) : (
+                <p style={{ color: 'var(--text-muted)', fontSize: '.88rem' }}>
+                  No matching job posting keywords were found. Try adding the core skills from the description.
+                </p>
+              )}
+            </div>
+          )}
+
           <div className="card">
             <SectionTitle icon="💪" label="Strengths" bg="rgba(16,185,129,.12)" />
             <ul className="insight-list">

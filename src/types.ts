@@ -33,6 +33,10 @@ export type ResumeAnalysis = {
 
   breakdown: BreakdownScore[];
   atsScore: number;
+  jobMatchScore: number;
+  jobDescriptionProvided: boolean;
+  matchedJobKeywords: string[];
+  missingJobKeywords: string[];
 
   wordCount: number;
   hasSummary: boolean;

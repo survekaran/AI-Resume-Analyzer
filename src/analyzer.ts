@@ -62,6 +62,11 @@ function extractMissingKeywords(text: string, foundSkills: string[]): string[] {
   return [...new Set(missing)].slice(0, 10);
 }
 
+function extractKeywords(text: string, pool: string[]): string[] {
+  const norm = normalize(text);
+  return pool.filter(keyword => norm.includes(keyword.toLowerCase()));
+}
+
 // ─── Work Experience parser ─────────────────────────────────────────────────
 function extractWorkExperience(text: string) {
   const results: { role: string; company: string; period: string }[] = [];
@@ -136,10 +141,14 @@ function extractEducation(text: string) {
 }
 
 // ─── Main analyzer ────────────────────────────────────────────────────────────
-export function analyzeResume(text: string): ResumeAnalysis {
+export function analyzeResume(text: string, jobDescription = ''): ResumeAnalysis {
   const norm = normalize(text);
   const wordCount = text.trim().split(/\s+/).length;
   const lines = text.split(/\n|\r/).filter(l => l.trim().length > 0);
+
+  const jobDescriptionProvided = Boolean(jobDescription && jobDescription.trim().length > 20);
+  const jobDescriptionSkills = jobDescriptionProvided ? extractSkills(jobDescription) : [];
+  const jobDescriptionKeywords = jobDescriptionProvided ? extractKeywords(jobDescription, IMPORTANT_KEYWORDS) : [];
 
   // ── Extract ──────────────────────────────────────────────────────────────
   const extractedSkills = extractSkills(text);
@@ -186,6 +195,28 @@ export function analyzeResume(text: string): ResumeAnalysis {
     (hasActionVerbs ? 30 : 0) +
     Math.min(30, extractedSkills.filter(s => TECH_SKILLS.includes(s)).length * 4)
   ));
+
+  const matchedJobKeywords = jobDescriptionProvided
+    ? jobDescriptionKeywords.filter(kw => norm.includes(kw.toLowerCase()))
+    : [];
+  const missingJobKeywords = jobDescriptionProvided
+    ? jobDescriptionKeywords.filter(kw => !norm.includes(kw.toLowerCase()))
+    : [];
+  const jobDescriptionSkillMatches = jobDescriptionSkills.filter(jobSkill =>
+    extractedSkills.some(resumeSkill => resumeSkill.toLowerCase() === jobSkill.toLowerCase())
+  );
+
+  const jobSkillMatchScore = jobDescriptionSkills.length
+    ? Math.round((jobDescriptionSkillMatches.length / jobDescriptionSkills.length) * 100)
+    : 0;
+  const jobKeywordMatchScore = jobDescriptionKeywords.length
+    ? Math.round((matchedJobKeywords.length / jobDescriptionKeywords.length) * 100)
+    : 0;
+  const weightTotal = (jobDescriptionSkills.length ? 0.65 : 0) + (jobDescriptionKeywords.length ? 0.35 : 0) || 1;
+  const jobMatchScore = jobDescriptionProvided
+    ? Math.round(((jobDescriptionSkills.length ? jobSkillMatchScore * 0.65 : 0) + (jobDescriptionKeywords.length ? jobKeywordMatchScore * 0.35 : 0)) / weightTotal)
+    : 0;
+
   const atsScore = Math.min(100, Math.round(
     formatScore * 0.35 +
     skillScore * 0.25 +
@@ -251,12 +282,21 @@ export function analyzeResume(text: string): ResumeAnalysis {
       : 'Your keyword coverage looks solid!',
   ];
 
+  if (jobDescriptionProvided) {
+    if (missingJobKeywords.length > 0) {
+      actionableTips.push(`Improve your job-match score by adding: ${missingJobKeywords.slice(0, 5).join(', ')}`);
+    } else {
+      actionableTips.push('Your resume already matches the job description language well.');
+    }
+  }
+
   // ── Breakdown ─────────────────────────────────────────────────────────────
   const breakdown: BreakdownScore[] = [
     { label: 'Skills & Keywords',     score: skillScore,      color: 'default' },
     { label: 'Content & Clarity',     score: contentScore,    color: contentScore >= 60 ? 'emerald' : 'amber' },
     { label: 'Format & Contact Info', score: formatScore,     color: formatScore >= 60 ? 'default' : 'amber' },
     { label: 'ATS Compatibility',      score: atsScore,        color: atsScore >= 70 ? 'emerald' : atsScore >= 45 ? 'amber' : 'rose' },
+    { label: 'Job Description Match',  score: jobMatchScore,   color: jobMatchScore >= 70 ? 'emerald' : jobMatchScore >= 45 ? 'amber' : 'rose' },
     { label: 'Experience & Education',score: experienceScore, color: 'emerald' },
     { label: 'Impact & Achievements', score: impactScore,     color: impactScore >= 50 ? 'emerald' : 'rose' },
   ];
@@ -274,6 +314,10 @@ export function analyzeResume(text: string): ResumeAnalysis {
     actionableTips,
     breakdown,
     atsScore,
+    jobMatchScore,
+    jobDescriptionProvided,
+    matchedJobKeywords,
+    missingJobKeywords,
     wordCount,
     hasSummary,
     hasQuantifiedAchievements,

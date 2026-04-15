@@ -149,6 +149,49 @@ body {
 /* ─── Upload Zone ────────────────────────────────────────────────────── */
 .upload-section { padding: 0 0 72px; }
 
+.job-description-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px 26px 22px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.job-description-label {
+  display: block;
+  font-size: .95rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.job-description-textarea {
+  width: 100%;
+  min-height: 180px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  padding: 16px 14px;
+  font-size: .95rem;
+  color: var(--text-primary);
+  background: var(--bg);
+  resize: vertical;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.job-description-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(79,70,229,.08);
+}
+
+.job-description-hint {
+  margin-top: 12px;
+  font-size: .88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
 .upload-zone {
   border: 2px dashed var(--border-mid);
   border-radius: var(--radius-xl);
