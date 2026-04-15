@@ -32,6 +32,7 @@ export type ResumeAnalysis = {
   actionableTips: string[];
 
   breakdown: BreakdownScore[];
+  atsScore: number;
 
   wordCount: number;
   hasSummary: boolean;

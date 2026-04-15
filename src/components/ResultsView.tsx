@@ -42,7 +42,7 @@ const ResultsView: React.FC<ResultsViewProps> = ({ analysis, fileName, onReset }
     extractedSkills, missingKeywords,
     workExperience, education,
     strengths, weaknesses, actionableTips,
-    breakdown, wordCount,
+    breakdown, atsScore, wordCount,
   } = analysis;
 
   // Animate entry
@@ -103,7 +103,7 @@ const ResultsView: React.FC<ResultsViewProps> = ({ analysis, fileName, onReset }
           <div className="score-left">
             <h2>Resume Analysis Report</h2>
             <p>
-              Analyzed <strong>{fileName}</strong> · {wordCount} words · {extractedSkills.length} skills detected
+              Analyzed <strong>{fileName}</strong> · {wordCount} words · {extractedSkills.length} skills detected · ATS {atsScore}/100
             </p>
             <div className={`grade-pill ${grade}`} style={{ marginTop: 14 }}>
               {gradeLabel}

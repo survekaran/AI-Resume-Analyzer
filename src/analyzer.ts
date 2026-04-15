@@ -186,7 +186,14 @@ export function analyzeResume(text: string): ResumeAnalysis {
     (hasActionVerbs ? 30 : 0) +
     Math.min(30, extractedSkills.filter(s => TECH_SKILLS.includes(s)).length * 4)
   ));
-
+  const atsScore = Math.min(100, Math.round(
+    formatScore * 0.35 +
+    skillScore * 0.25 +
+    contentScore * 0.20 +
+    experienceScore * 0.10 +
+    (hasSummary ? 5 : 0) +
+    (hasQuantifiedAchievements ? 5 : 0)
+  ));
   // ── Overall weighted score ────────────────────────────────────────────────
   const overallScore = Math.min(100, Math.round(
     skillScore * 0.25 +
@@ -249,6 +256,7 @@ export function analyzeResume(text: string): ResumeAnalysis {
     { label: 'Skills & Keywords',     score: skillScore,      color: 'default' },
     { label: 'Content & Clarity',     score: contentScore,    color: contentScore >= 60 ? 'emerald' : 'amber' },
     { label: 'Format & Contact Info', score: formatScore,     color: formatScore >= 60 ? 'default' : 'amber' },
+    { label: 'ATS Compatibility',      score: atsScore,        color: atsScore >= 70 ? 'emerald' : atsScore >= 45 ? 'amber' : 'rose' },
     { label: 'Experience & Education',score: experienceScore, color: 'emerald' },
     { label: 'Impact & Achievements', score: impactScore,     color: impactScore >= 50 ? 'emerald' : 'rose' },
   ];
@@ -265,6 +273,7 @@ export function analyzeResume(text: string): ResumeAnalysis {
     weaknesses,
     actionableTips,
     breakdown,
+    atsScore,
     wordCount,
     hasSummary,
     hasQuantifiedAchievements,
